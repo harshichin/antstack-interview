@@ -1,0 +1,108 @@
+<div class="card col-md-6 offset-md-3 mt-5 form-border">
+  <h4><u>Employee Form</u></h4>
+  <form [formGroup]="EmployeeForm" (ngSubmit)="submit()">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" formControlName="name" class="form-control">
+      <p *ngIf="( EmployeeForm.controls.name.touched) && EmployeeForm.controls.name.errors?.required"
+        class="text-danger">
+        Name is required.
+      </p>
+      <p *ngIf="EmployeeForm.get('name').touched && (EmployeeForm.get('name').errors?.pattern)" class="text-danger">
+        Name is invalid!
+      </p>
+      <p class="text-danger"
+        *ngIf="EmployeeForm.get('name').touched && EmployeeForm.get('name').errors?.minlength || EmployeeForm.get('name').errors?.maxlength">
+        Name accept between 3-20 characters
+      </p>
+    </div>
+    <div class="form-group">
+      <label>Designation</label>
+      <input type="text" class="form-control" formControlName="designation">
+      <p *ngIf="(EmployeeForm.controls.designation.touched) && EmployeeForm.controls.designation.errors?.required"
+        class="text-danger">
+        Designation is required.
+      </p>
+      <p *ngIf="EmployeeForm.get('designation').touched && (EmployeeForm.get('designation').errors?.pattern)"
+        class="text-danger">Designation is invalid!
+      </p>
+      <p class="text-danger"
+        *ngIf="EmployeeForm.get('designation').touched && EmployeeForm.get('designation').errors?.minlength || EmployeeForm.get('designation').errors?.maxlength">
+        Designation accept between 3-20 characters
+      </p>
+    </div>
+    <label>Contact Details</label>
+    <div class="row mb-3" formArrayName="contact" *ngFor="let phones of phone.controls; let i = index;">
+      <div class="col" [formGroupName]="i">
+        <select class="form-control" formControlName="type">
+          <option>Primary</option>
+          <option>Secondary</option>
+          <option>Emergency</option>
+        </select>
+        <p *ngIf="(phone.controls[i].get('type').touched) && phone.controls[i].get('type').errors?.required"
+          class="text-danger">
+          Type is required.
+        </p>
+      </div>
+      <div class="col" [formGroupName]="i">
+        <input type="number" class="form-control" formControlName="phoneNumber" placeholder="Phone Number">
+        <p *ngIf="(phone.controls[i].get('phoneNumber').touched) && phone.controls[i].get('phoneNumber').errors?.required"
+          class="text-danger">
+          Phone Number is required.
+        </p>
+        <p *ngIf="phone.controls[i].get('phoneNumber').touched && (phone.controls[i].get('phoneNumber').errors?.pattern)"
+        class="text-danger">Phone Number is invalid!
+      </p>
+      </div>
+      <div class="col">
+        <div *ngIf="phone.controls.length != i+1">
+          <button type="button" class="btn btn-danger" (click)="removePhone()">Delete</button>
+        </div>
+        <div *ngIf="phone.controls.length == i+1">
+          <button type="button" class="btn btn-primary" (click)="addPhone(i)">Add</button>
+        </div>
+
+      </div>
+    </div>
+    <label>Skills</label>
+    <div class="row mb-3" formArrayName="skills" *ngFor="let skill of skills.controls; let i = index;">
+      <div class="col">
+        <input type="text" class="form-control" formControlName="{{i}}">
+        <p *ngIf="(skills.controls[i].touched) && skills.controls[i].errors?.required" class="text-danger">
+          Skills is required.
+        </p>
+        <p *ngIf="skills.controls[i].touched && (skills.controls[i].errors?.pattern)"
+        class="text-danger">Skills is invalid!
+      </p>
+      <p class="text-danger"
+      *ngIf="skills.controls[i].touched && skills.controls[i].errors?.minlength || skills.controls[i].errors?.maxlength">
+      Skills accept between 3-15 characters
+    </p>
+      </div>
+      <div class="col">
+        <div *ngIf="skills.controls.length != i+1">
+          <button type="button" class="btn btn-danger" (click)="removeSkills(i)">Delete</button>
+        </div>
+        <div *ngIf="skills.controls.length == i+1">
+          <button type="button" class="btn btn-primary" (click)="addSkills()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Date Of Birth</label>
+      <input type="date" class="form-control" formControlName="dob">
+      <p *ngIf="( EmployeeForm.controls.dob.touched) && EmployeeForm.controls.dob.errors?.required" class="text-danger">
+        Date Of Birth is required.
+      </p>
+    </div>
+    <button type="submit" [disabled]="EmployeeForm.invalid" class="btn btn-primary">Add Employee</button>
+    <button class="btn btn-secondary download-json-btn" *ngIf="jsonData.length > 0" type="button"
+      (click)="downloadJSON()">
+      <a [href]="downloadUrl" download="{{filename}}.json">Download JSON</a>
+    </button>
+  </form>
+</div>
+<div>
+  <p id="JSON" style="font-size: 15px; font-weight: bold;">
+  </p>
+</div>

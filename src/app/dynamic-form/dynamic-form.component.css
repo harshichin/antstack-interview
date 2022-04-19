@@ -1,0 +1,18 @@
+label {
+    display: block;
+}
+
+.form-border {
+  /* border: solid 2px black; */
+  padding: 40px;
+  box-shadow: 0px 0px 4px;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
+.download-json-btn{
+    float: right;
+}
