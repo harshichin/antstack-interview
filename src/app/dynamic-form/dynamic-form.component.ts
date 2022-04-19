@@ -21,6 +21,7 @@ import {
 export class DynamicFormComponent implements OnInit {
 
   EmployeeForm: FormGroup;
+  
   constructor(
     private fb: FormBuilder,
     private sanitizer: DomSanitizer
@@ -46,7 +47,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   newSkill(): FormControl {
-    return new FormControl('', [Validators.required,Validators.minLength(3), Validators.pattern(/^[a-zA-Z][a-zA-Z ]*$/), Validators.maxLength(15)])
+    return new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-Z][a-zA-Z ]*$/), Validators.maxLength(15)])
   }
 
   newPhone(): FormGroup {
@@ -71,17 +72,23 @@ export class DynamicFormComponent implements OnInit {
   removeSkills(i: number) {
     this.skills.removeAt(i);
   }
+
   removePhone(i: number) {
     this.phone.removeAt(i);
   }
 
   jsonData = []
+
   submit() {
-    console.log(this.EmployeeForm.value);
     this.jsonData.push(this.EmployeeForm.value)
     var displayJSON = document.getElementById("JSON");
     displayJSON.innerHTML = JSON.stringify(this.jsonData);
     this.EmployeeForm.reset();
+    (this.EmployeeForm.controls['contact'] as FormArray).clear();
+    (this.EmployeeForm.controls['skills'] as FormArray).clear();
+    this.addSkills();
+    this.addPhone(0);
+    this.fb.array([]);
   }
 
   downloadUrl;
@@ -94,7 +101,5 @@ export class DynamicFormComponent implements OnInit {
       "data:text/json;charset=UTF-8," + encodeURIComponent(data)
     );
     this.downloadUrl = url;
-    console.log(this.downloadUrl);
-
   }
 }
